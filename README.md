@@ -10,8 +10,7 @@ and follow the instructions. Afterwards a dry-run sync is attempted.
 
 ```
   gcds:
-    build:
-      context: ./gcdsdocker
+    image: "nborrmann/gcds"
     environment:
       - LDAP_PW=secret
       - DOMAIN=example.com
