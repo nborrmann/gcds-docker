@@ -19,8 +19,4 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
     (echo "o"; echo ""; echo "1"; echo ""; echo "y"; echo ""; echo "";) | /usr/src/dirsync-linux64.sh && \
     chmod +x /usr/local/scripts/*.sh
 
-
 CMD ["/usr/local/scripts/setup.sh"]
-
-
-

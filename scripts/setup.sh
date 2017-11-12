@@ -1,21 +1,24 @@
 #!/bin/bash
 
-cp /assets/config/gcds-config.xml /usr/local/GoogleCloudDirSync/gcds-config.xml
-LDAP_PASS_ENCRYPTED=$(echo $LDAP_PW | /usr/local/GoogleCloudDirSync/encrypt-util -c gcds-config.xml | grep -Po "(?<=cut and paste\): )([a-zA-Z0-9\+=/]+)$")
+LDAP_PASS_ENCRYPTED=$(echo $LDAP_PW | /usr/local/GoogleCloudDirSync/encrypt-util -c /assets/config/gcds-config.xml | grep -Po "(?<=cut and paste\): )([a-zA-Z0-9\+=/]+)$")
 echo "encrypted pw: $LDAP_PASS_ENCRYPTED"
 
-sed -ri "s@(<authCredentialsEncrypted>).+(<\/authCredentialsEncrypted>)@\1${LDAP_PASS_ENCRYPTED}\2@" /usr/local/GoogleCloudDirSync/gcds-config.xml
-# if the oAuth2RefreshToken value hasn't been encrypted in this volume, the auth tool will throw an error:
-sed -ri "s@(<oAuth2RefreshToken>).+(<\/oAuth2RefreshToken>)@\1${LDAP_PASS_ENCRYPTED}\2@" /usr/local/GoogleCloudDirSync/gcds-config.xml
-sed -ri "s@(<hostname>).+(<\/hostname>)@\1${HOST}\2@" /usr/local/GoogleCloudDirSync/gcds-config.xml
-sed -ri "s@(<port>).+(<\/port>)@\1${PORT}\2@" /usr/local/GoogleCloudDirSync/gcds-config.xml
+sed -ri "s@(<authCredentialsEncrypted>).+(<\/authCredentialsEncrypted>)@\1${LDAP_PASS_ENCRYPTED}\2@" /assets/config/gcds-config.xml
+sed -ri "s@(<hostname>).+(<\/hostname>)@\1${HOST}\2@" /assets/config/gcds-config.xml
+sed -ri "s@(<port>).+(<\/port>)@\1${PORT}\2@" /assets/config/gcds-config.xml
 
-mkdir /var/log/gcds
+mkdir -p /var/log/gcds
+echo "" >> /var/log/gcds/gcds.log
+
+echo "SHELL=/bin/sh" > /etc/crontab
+echo "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" >> /etc/crontab
 
 if [ $DRY_RUN  = "TRUE" ];  then
-    echo "$CRON_EXP root /usr/local/GoogleCloudDirSync/sync-cmd -c gcds-config.xml -r /var/log/gcds/gcds.log" >> /etc/crontab
+    echo "$CRON_EXP root /usr/local/GoogleCloudDirSync/sync-cmd -c /assets/config/gcds-config.xml >> /var/log/gcds/gcds.log 2>&1" >> /etc/crontab
 else
-    echo "$CRON_EXP root /usr/local/GoogleCloudDirSync/sync-cmd -c gcds-config.xml -r /var/log/gcds/gcds.log -a" >> /etc/crontab
+    echo "$CRON_EXP root /usr/local/GoogleCloudDirSync/sync-cmd -c /assets/config/gcds-config.xml -a >> /var/log/gcds/gcds.log 2>&1" >> /etc/crontab
 fi
 
-cron -f
+cron
+
+exec tail -f /var/log/gcds/gcds.log
