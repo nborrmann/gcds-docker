@@ -34,7 +34,7 @@ The OAuth token survives a `restart` but after re-building the image the `auth.s
 
 ```
   gcds:
-    image: "nborrmann/gcds"
+    image: "nborrmann/gcds-docker"
     environment:
       - LDAP_PW=secret
       - DOMAIN=example.com
