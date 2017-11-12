@@ -3,7 +3,7 @@ FROM debian:jessie
 MAINTAINER Nils Borrmann
 
 ENV DOMAIN "example.com"
-ENV LDAP_PW "s3cret"
+ENV LDAP_PW "secret"
 ENV HOST localhost
 ENV PORT 10389
 ENV CRON_EXP "* * * * *"
