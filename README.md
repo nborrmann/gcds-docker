@@ -25,7 +25,7 @@ The OAuth token survives a `restart` but after re-build the image the `auth.sh` 
 |-----------|-------------|------------|
 | `HOST` | The hostname of your LDAP server | `localhost` |
 | `PORT` | The port of your LDAP server |`10389` |
-| `LDAP_PW` | The password of your LDAP admin user | `secret`) |
+| `LDAP_PW` | The password of your LDAP admin user | `secret` |
 | `DOMAIN` | Domain name for your GSuite | `example.com` |
 | `DRY_RUN` | If `TRUE` doesn't apply changes to GSuite | `TRUE` |
 | `CRON_EXP` | Cron expression for the gcds sync runs | `* * * * *` |
