@@ -10,7 +10,7 @@ docker exec -it gcds /usr/local/scripts/auth.sh
 ```
 and follow the instructions. The script attempts a dry-run sync after authenticating.
 
-The OAuth token survives a `restart` but after re-build the image the `auth.sh` script needs to be called again. 
+The OAuth token survives a `restart` but after re-building the image the `auth.sh` script needs to be called again. 
 
 ## Volumes
 
